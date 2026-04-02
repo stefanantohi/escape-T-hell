@@ -13,7 +13,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
+      <div className="flex h-screen bg-zinc-50 text-zinc-100 overflow-hidden">
         <Routes>
           {/* Public Landing Page - only shown if NOT logged in */}
           <Route 
