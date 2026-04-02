@@ -7,7 +7,7 @@ class LearningResource(Base):
     __tablename__ = "learning_resources"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # NULL = localStorage fallback for now
+    user_id = Column(Integer, nullable=True)  # NULL = localStorage fallback for now
     url = Column(String, index=True, nullable=False)
     title = Column(String, index=True, nullable=False)
     resource_type = Column(String, nullable=False)   # video, article, course, docs, other
