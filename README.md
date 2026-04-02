@@ -5,8 +5,8 @@
 Stop jumping between tabs and forgetting what you learned.  
 Log tutorials, articles, videos, and courses you complete each day. Track your progress visually and build consistent learning habits.
 
-![Backend CI](https://github.com/stefanantohi/escape-tutorial-hell/actions/workflows/ci-backend.yml/badge.svg)
-![Frontend CI](https://github.com/stefanantohi/escape-tutorial-hell/actions/workflows/ci-frontend.yml/badge.svg)
+![Backend CI](https://github.com/stefanantohi/escape-T-hell/actions/workflows/ci-backend.yml/badge.svg)
+![Frontend CI](https://github.com/stefanantohi/escape-T-hell/actions/workflows/ci-frontend.yml/badge.svg)
 
 ## Features
 
