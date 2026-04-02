@@ -8,7 +8,7 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 ![Backend CI](https://github.com/stefanantohi/escape-tutorial-hell/actions/workflows/ci-backend.yml/badge.svg)
 ![Frontend CI](https://github.com/stefanantohi/escape-tutorial-hell/actions/workflows/ci-frontend.yml/badge.svg)
 
-## ✨ Features
+## Features
 
 - **/day** — Quick form to add/edit/delete today's tutorials (URLs + title + category + time spent + notes)
 - **/overview** — Beautiful GitHub-style heatmap (toggle between total time spent or number of completions)
@@ -19,7 +19,7 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 - Fully responsive design with dark mode support
 - Static landing/demo page for showcasing the app
 
-## 🛠 Tech Stack
+## Tech Stack
 
 **Backend**
 - FastAPI (Python 3.11)
@@ -69,7 +69,7 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 
 ## Contributing
 
-Feel free to open issues or PRs.
+Feel free to open issues or PRs
 
 ## License
 MIT
