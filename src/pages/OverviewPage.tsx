@@ -1,8 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import ActivityHeatmap from '@/components/ActivityHeatmap';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { useLocalStorageResources } from '@/hooks/useLocalStorage';
 import { format } from 'date-fns';
 
