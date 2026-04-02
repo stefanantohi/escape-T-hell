@@ -59,7 +59,7 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 ##  Project roadmap
 
 - [x] monorepo + GitHub Actions CI/CD
-- [ ] backend models & CRUD
+- [x] backend models & CRUD
 - [ ] react frontend
 - [ ] localStorage support
 - [ ] GitHub + Google OAuth
