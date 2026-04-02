@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import {
@@ -27,12 +26,11 @@ import {
 } from "@/hooks/useLocalStorage";
 
 export default function DayPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();        // Removed setSearchParams
   const selectedDate =
     searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
 
   const {
-    resources,
     addResource,
     updateResource,
     deleteResource,
@@ -48,7 +46,7 @@ export default function DayPage() {
   const [formData, setFormData] = useState({
     url: "",
     title: "",
-    resource_type: "video" as const,
+    resource_type: "video" as "video" | "article" | "course" | "docs" | "other",
     time_spent_minutes: 30,
     notes: "",
     is_completed: true,
