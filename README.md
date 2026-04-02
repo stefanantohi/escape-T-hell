@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Escape Tutorial Hell
 
 **A simple daily tutorial / learning tracker with GitHub-style activity heatmap**
