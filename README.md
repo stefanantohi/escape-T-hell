@@ -42,9 +42,9 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 ## Quick start
 
 1. Clone the repository
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/escape-tutorial-hell.git
-   cd escape-tutorial-hell
+ ```bash
+   git clone https://github.com/YOUR_USERNAME/escape-T-hell.git
+   cd escape-T-hell
 ```
 
 2. Start with Docker Compose (recommended)
@@ -60,11 +60,11 @@ Log tutorials, articles, videos, and courses you complete each day. Track your p
 
 - [x] monorepo + GitHub Actions CI/CD
 - [x] backend models & CRUD
-- [ ] react frontend
-- [ ] localStorage support
+- [x] react frontend
+- [x] localStorage support
 - [ ] GitHub + Google OAuth
-- [ ] heatmap
-- [ ] docker setup
+- [x] heatmap
+- [x] docker setup
 - [ ] deployment to AWS EC2
 
 ## Contributing
