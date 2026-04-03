@@ -21,7 +21,6 @@ export function useResources() {
 
   const STORAGE_KEY = 'escape-tutorial-hell-resources';
 
-  // Load from localStorage (fallback)
   const loadFromLocalStorage = useCallback(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) setResources(JSON.parse(saved));
@@ -32,28 +31,33 @@ export function useResources() {
     setResources(newResources);
   }, []);
 
+  // Load initial data
   useEffect(() => {
     loadFromLocalStorage();
   }, [loadFromLocalStorage]);
 
-  // Add resource
+  // Add resource - try backend first
   const addResource = async (data: Omit<LearningResource, 'id' | 'created_at' | 'updated_at'>) => {
     try {
       setLoading(true);
       const newResource = await resourcesApi.create({
-        ...data,
+        url: data.url,
+        title: data.title,
+        resource_type: data.resource_type,
         date_completed: data.date_completed,
-        is_completed: data.is_completed ?? true,
+        time_spent_minutes: data.time_spent_minutes,
+        notes: data.notes,
+        is_completed: data.is_completed,
       });
 
       const updated = [...resources, newResource];
       saveToLocalStorage(updated);
-      toast.success("Resource added successfully");
+      toast.success("Resource saved to backend");
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to save to backend. Saved locally.");
-      // Fallback to localStorage
-      const fallbackResource = {
+      console.error("Backend save failed, using localStorage fallback", error);
+      toast.error("Backend unavailable. Saved locally.");
+
+      const fallbackResource: LearningResource = {
         ...data,
         id: Date.now().toString(),
         created_at: new Date().toISOString(),
@@ -71,7 +75,7 @@ export function useResources() {
     try {
       setLoading(true);
       await resourcesApi.update(id, updates);
-      
+
       const updated = resources.map(r =>
         r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r
       );
@@ -79,7 +83,7 @@ export function useResources() {
       toast.success("Resource updated");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update on backend. Updated locally.");
+      toast.error("Backend update failed. Updated locally.");
       const updated = resources.map(r =>
         r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r
       );
@@ -94,13 +98,13 @@ export function useResources() {
     try {
       setLoading(true);
       await resourcesApi.delete(id);
-      
+
       const updated = resources.filter(r => r.id !== id);
       saveToLocalStorage(updated);
       toast.success("Resource deleted");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete from backend. Deleted locally.");
+      toast.error("Backend delete failed. Deleted locally.");
       const updated = resources.filter(r => r.id !== id);
       saveToLocalStorage(updated);
     } finally {
