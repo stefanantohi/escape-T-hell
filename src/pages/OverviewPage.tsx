@@ -2,11 +2,11 @@ import { useState, useMemo } from 'react';
 import ActivityHeatmap from '@/components/ActivityHeatmap';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useLocalStorageResources } from '@/hooks/useLocalStorage';
+import { useResources } from '@/hooks/useResources';
 import { format } from 'date-fns';
 
 export default function OverviewPage() {
-  const { resources, getResourcesByDate } = useLocalStorageResources();
+  const { resources, getResourcesByDate } = useResources();
   const [metric, setMetric] = useState<'time' | 'count'>('time');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
