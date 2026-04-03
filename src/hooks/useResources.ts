@@ -18,6 +18,7 @@ export interface LearningResource {
 export function useResources() {
   const [resources, setResources] = useState<LearningResource[]>([]);
   const [loading, setLoading] = useState(false);
+  const [backendAvailable, setBackendAvailable] = useState(true);
 
   const STORAGE_KEY = 'escape-tutorial-hell-resources';
 
@@ -31,12 +32,11 @@ export function useResources() {
     setResources(newResources);
   }, []);
 
-  // Load initial data
   useEffect(() => {
     loadFromLocalStorage();
   }, [loadFromLocalStorage]);
 
-  // Add resource - try backend first
+  // Add resource
   const addResource = async (data: Omit<LearningResource, 'id' | 'created_at' | 'updated_at'>) => {
     try {
       setLoading(true);
@@ -54,8 +54,9 @@ export function useResources() {
       saveToLocalStorage(updated);
       toast.success("Resource saved to backend");
     } catch (error) {
-      console.error("Backend save failed, using localStorage fallback", error);
-      toast.error("Backend unavailable. Saved locally.");
+      console.error("Backend unavailable, using localStorage", error);
+      setBackendAvailable(false);
+      toast.error("Backend unavailable. Data saved locally only.");
 
       const fallbackResource: LearningResource = {
         ...data,
@@ -80,10 +81,10 @@ export function useResources() {
         r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r
       );
       saveToLocalStorage(updated);
-      toast.success("Resource updated");
+      toast.success("Resource updated on backend");
     } catch (error) {
       console.error(error);
-      toast.error("Backend update failed. Updated locally.");
+      toast.error("Backend unavailable. Updated locally only.");
       const updated = resources.map(r =>
         r.id === id ? { ...r, ...updates, updated_at: new Date().toISOString() } : r
       );
@@ -101,10 +102,10 @@ export function useResources() {
 
       const updated = resources.filter(r => r.id !== id);
       saveToLocalStorage(updated);
-      toast.success("Resource deleted");
+      toast.success("Resource deleted from backend");
     } catch (error) {
       console.error(error);
-      toast.error("Backend delete failed. Deleted locally.");
+      toast.error("Backend unavailable. Deleted locally only.");
       const updated = resources.filter(r => r.id !== id);
       saveToLocalStorage(updated);
     } finally {
@@ -123,5 +124,6 @@ export function useResources() {
     updateResource,
     deleteResource,
     getResourcesByDate,
+    backendAvailable,
   };
 }
