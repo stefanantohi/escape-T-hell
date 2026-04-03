@@ -5,22 +5,25 @@ import os
 
 from app.core.config import settings
 
-# SQLite setup with proper connection handling for FastAPI
-DATABASE_URL = settings.DATABASE_URL
+# Use a consistent path inside the container
+DATABASE_URL = "sqlite:////data/db.sqlite3"
 
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False},
-    poolclass=StaticPool,   # Simple pooling suitable for SQLite in dev
+    poolclass=StaticPool,
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Dependency for FastAPI routes
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+# Auto-create tables on startup
+Base.metadata.create_all(bind=engine)
+print("✅ Database tables created/verified on startup")
