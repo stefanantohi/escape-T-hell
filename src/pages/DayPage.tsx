@@ -24,8 +24,7 @@ import { useResources, LearningResource } from "@/hooks/useResources";
 
 export default function DayPage() {
   const [searchParams] = useSearchParams();
-  const selectedDate =
-    searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
+  const selectedDate = searchParams.get("date") || format(new Date(), "yyyy-MM-dd");
 
   const {
     resources,
@@ -38,8 +37,7 @@ export default function DayPage() {
   const todayResources = getResourcesByDate(selectedDate);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingResource, setEditingResource] =
-    useState<LearningResource | null>(null);
+  const [editingResource, setEditingResource] = useState<LearningResource | null>(null);
 
   const [formData, setFormData] = useState({
     url: "",
@@ -47,7 +45,7 @@ export default function DayPage() {
     resource_type: "video" as "video" | "article" | "course" | "docs" | "other",
     time_spent_minutes: 0,
     notes: "",
-    is_completed: "Not Started" as "Not Started" | "In Progress" | "Completed",
+    is_completed: false,        // Default = In Progress
   });
 
   const openNewForm = () => {
@@ -56,9 +54,9 @@ export default function DayPage() {
       url: "",
       title: "",
       resource_type: "video",
-      time_spent_minutes: 30,
+      time_spent_minutes: 0,
       notes: "",
-      is_completed: true,
+      is_completed: false,
     });
     setIsFormOpen(true);
   };
@@ -74,8 +72,6 @@ export default function DayPage() {
     const resourceData = {
       ...formData,
       date_completed: selectedDate,
-      // Convert string status to boolean for backward compatibility with current interface
-      is_completed: formData.is_completed === "Completed",
     };
 
     if (editingResource) {
@@ -96,7 +92,7 @@ export default function DayPage() {
       resource_type: resource.resource_type,
       time_spent_minutes: resource.time_spent_minutes,
       notes: resource.notes || "",
-      is_completed: resource.is_completed ? "Completed" : "Not Started",
+      is_completed: resource.is_completed,
     });
     setIsFormOpen(true);
   };
@@ -110,7 +106,6 @@ export default function DayPage() {
   return (
     <div className="flex-1 p-8 overflow-auto">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold">Today</h1>
@@ -174,19 +169,22 @@ export default function DayPage() {
                     </a>
                     <p className="text-sm text-zinc-500 mt-1 line-clamp-1">{resource.url}</p>
 
-                    <div className="flex gap-3 mt-3">
-                      <span className="text-xs px-3 py-1 bg-zinc-800 rounded-full">
+                    <div className="flex gap-3 mt-3 flex-wrap">
+                      <span className="text-xs px-3 py-1 bg-zinc-800 text-white rounded-full">
                         {resource.resource_type}
                       </span>
-                      <span className="text-xs px-3 py-1 bg-zinc-800 rounded-full">
+                      <span className="text-xs px-3 py-1 bg-zinc-800 text-white rounded-full">
                         {resource.time_spent_minutes} min
                       </span>
-                      {resource.is_completed && (
-                        <span className="text-xs px-3 py-1 bg-emerald-900 text-emerald-400 rounded-full flex items-center gap-1">
-                          <Check className="w-3 h-3" /> Completed
-                        </span>
-                      )}
+                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                        resource.is_completed 
+                          ? 'bg-emerald-900 text-emerald-300' 
+                          : 'bg-amber-900 text-amber-300'
+                      }`}>
+                        {resource.is_completed ? "Completed" : "In Progress"}
+                      </span>
                     </div>
+
                     {resource.notes && <p className="text-sm text-zinc-400 mt-3">{resource.notes}</p>}
                   </div>
 
@@ -235,65 +233,69 @@ export default function DayPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium">Type</label>
-                  <Select value={formData.resource_type} onValueChange={(value: any) => setFormData({ ...formData, resource_type: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="video">Video</SelectItem>
-                      <SelectItem value="article">Article</SelectItem>
-                      <SelectItem value="course">Course</SelectItem>
-                      <SelectItem value="docs">Documentation</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium">Time Spent (minutes)</label>
-                  <Input
-                    type="number"
-                    value={formData.time_spent_minutes || ""}   // This prevents the 0 from sticking
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      time_spent_minutes: e.target.value === "" ? 0 : parseInt(e.target.value) || 0
-                    })}
-                    min="0"
-                    placeholder="0"
-                  />
-                </div>
+              <div>
+                <label className="text-sm font-medium">Type</label>
+                <Select
+                  value={formData.resource_type}
+                  onValueChange={(value: any) => setFormData({ ...formData, resource_type: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="video">Video</SelectItem>
+                    <SelectItem value="article">Article</SelectItem>
+                    <SelectItem value="course">Course</SelectItem>
+                    <SelectItem value="docs">Documentation</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+
+              <div>
+                <label className="text-sm font-medium">Time Spent (minutes)</label>
+                <Input
+                  type="number"
+                  value={formData.time_spent_minutes || ""}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    time_spent_minutes: e.target.value === "" ? 0 : parseInt(e.target.value) || 0
+                  })}
+                  min="0"
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            {/* Simple Completion Toggle */}
+            <div>
+              <label className="text-sm font-medium">Status</label>
+              <Select 
+                value={formData.is_completed ? "Completed" : "In Progress"} 
+                onValueChange={(value) => setFormData({ 
+                  ...formData, 
+                  is_completed: value === "Completed" 
+                })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <div>
               <label className="text-sm font-medium">Notes</label>
               <Textarea
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                placeholder="Key takeaways, difficulties, etc."
+                placeholder="Key takeaways..."
                 rows={3}
               />
             </div>
-
-            <div>
-                <label className="text-sm font-medium">Status</label>
-                <Select 
-                  value={formData.is_completed} 
-                  onValueChange={(value: "Not Started" | "In Progress" | "Completed") => 
-                    setFormData({ ...formData, is_completed: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Not Started">Not Started</SelectItem>
-                    <SelectItem value="In Progress">In Progress</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
             <div className="flex justify-end gap-3 pt-4">
               <Button type="button" variant="ghost" onClick={() => setIsFormOpen(false)}>
