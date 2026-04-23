@@ -1,8 +1,7 @@
 # Escape Tutorial Hell
 
-**A simple daily tutorial / learning tracker with GitHub-style activity heatmap**
+**Learning tracker with GitHub-style activity heatmap**
 
-Stop jumping between tabs and forgetting what you learned.  
 Log tutorials, articles, videos, and courses you complete each day. Track your progress visually and build consistent learning habits.
 
 ![Backend CI](https://github.com/stefanantohi/escape-T-hell/actions/workflows/ci-backend.yml/badge.svg)
